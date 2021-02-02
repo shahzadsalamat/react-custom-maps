@@ -1,34 +1,44 @@
-import React from 'react';
-import { withScriptjs, withGoogleMap, GoogleMap, Marker } from "react-google-maps";
+import React, { useState } from 'react';
+import { withScriptjs, withGoogleMap, GoogleMap, Marker, InfoWindow } from "react-google-maps";
 import finCities from '../json-data/finland-cities.json';
-
-
-
 
 const GoogleMaps = () => {
 
     const Map = () => {
+        const [selectedMarker, SetSelectedMarker] = useState(null);
         return (
             <GoogleMap
                 defaultZoom={8}
                 defaultCenter={{ lat: 60.1756, lng: 24.9342 }}
             >
-                { finCities.map(cities => {
+                { finCities.map(city => {
                     return (
                         <Marker
-                            position={{ lat: JSON.parse(cities.lat), lng: JSON.parse(cities.lng) }}
-
+                            position={{ lat: JSON.parse(city.lat), lng: JSON.parse(city.lng) }}
+                            onClick={() => {
+                                SetSelectedMarker(city)
+                            }}
                         />
                     )
                 })}
-
-
+                {selectedMarker && (
+                    <InfoWindow
+                        position={{ lat: JSON.parse(selectedMarker.lat), lng: JSON.parse(selectedMarker.lng) }}
+                        onCloseClick={() => {
+                            SetSelectedMarker(null)
+                        }}
+                    >
+                        <div>
+                            <h1>{selectedMarker.city}</h1>
+                            <p>Population: {selectedMarker.population_proper}</p>
+                        </div>
+                    </InfoWindow>
+                )}
             </GoogleMap>
         )
     }
 
     const MapWrapper = withScriptjs(withGoogleMap(Map));
-
 
     return (
         <div>
