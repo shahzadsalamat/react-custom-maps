@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { withScriptjs, withGoogleMap, GoogleMap, Marker, InfoWindow } from "react-google-maps";
 import finCities from '../json-data/finland-cities.json';
+import mapStyle from "./mapStyle";
 
 const GoogleMaps = () => {
 
@@ -8,8 +9,9 @@ const GoogleMaps = () => {
         const [selectedMarker, SetSelectedMarker] = useState(null);
         return (
             <GoogleMap
-                defaultZoom={8}
-                defaultCenter={{ lat: 60.1756, lng: 24.9342 }}
+                defaultZoom={7}
+                defaultCenter={{ lat: 61.7833, lng: 25.7000 }}
+                defaultOptions={{ styles: mapStyle }}
             >
                 { finCities.map(city => {
                     return (
@@ -17,6 +19,10 @@ const GoogleMaps = () => {
                             position={{ lat: JSON.parse(city.lat), lng: JSON.parse(city.lng) }}
                             onClick={() => {
                                 SetSelectedMarker(city)
+                            }}
+                            icon={{
+                                url: './city-marker.png',
+                                scaledSize: new window.google.maps.Size(25, 25)
                             }}
                         />
                     )
@@ -42,10 +48,10 @@ const GoogleMaps = () => {
 
     return (
         <div>
-            <div style={{ width: '50vw', height: '100vh', backgroundColor: 'black' }}>
+            <div style={{ width: '100vw', height: '100vh', backgroundColor: 'black' }}>
 
                 <MapWrapper
-                    googleMapURL="https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places"
+                    googleMapURL="https://maps.googleapis.com/maps/api/js?key=AIzaSyD4JMhZ3Ppj23nTDI8c5Gk0BNdVzXhIykI&v=3.exp&libraries=geometry,drawing,places"                    
                     loadingElement={<div style={{ height: `100%` }} />}
                     containerElement={<div style={{ height: `100%` }} />}
                     mapElement={<div style={{ height: `100%` }} />}
